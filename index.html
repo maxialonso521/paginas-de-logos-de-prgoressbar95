@@ -38,8 +38,8 @@
       background-position: center;
       border: 3px solid #000;
       margin-bottom: 10px;
-      transition: filter 0.3s ease, transform 0.3s ease;
-      filter: grayscale(100%);
+      transition: transform 0.3s ease;
+      filter: grayscale(100%);  /* Aplicando el filtro grayscale */
     }
 
     .icono-logro:hover {
@@ -89,7 +89,6 @@
     }
 
     .activo .icono-logro {
-      filter: grayscale(0%);
       transform: rotate(360deg);
     }
 
