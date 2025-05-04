@@ -144,10 +144,10 @@
 
       contenedor.onclick = function() { alternarLogro(contenedor, num); };
 
-      let icono = document.createElement("div");
-      icono.className = "icono-logro";
-      icono.style.backgroundImage = `url('Logros/${num}.webp')`;
-      icono.title = `Logro ${num}`;
+ let icono = document.createElement("div");
+        icono.className = "icono-logro";
+        icono.style.backgroundImage = `url('${num}.webp')`; // <- Aquí se quitó "Logros/"
+        icono.title = `Logro ${num}`;
 
       let palanca = document.createElement("div");
       palanca.className = "palanca";
