@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Catálogo de logros de Progressbar 95</title>
+  <title>Catálogo de Logros de Progressbar 95</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <style>
+    /* Estilos personalizados */
     body {
       background: linear-gradient(to bottom, #2c3e50, #34495e);
       font-family: 'Courier New', monospace;
@@ -20,7 +21,7 @@
       color: white;
     }
 
-    .logro-sistema {
+    .logro {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -35,30 +36,33 @@
       position: relative;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       overflow: hidden;
+    
     }
 
-    .logro-sistema:hover {
+    .logro:hover {
       transform: translateY(-10px);
       box-shadow: 0 0 20px rgba(236, 240, 241, 0.8);
     }
 
-    .icono-logro {
+    .icono {
       width: 80px;
       height: 80px;
       background-color: #34495e;
       background-size: cover;
       background-position: center;
-      border-radius: 50%; /* Cambiado a círculo */
+      border-radius: 50%;
       margin-bottom: 10px;
       border: 3px solid #ecf0f1;
       box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
       transition: all 0.5s ease;
-      filter: grayscale(1) brightness(0.8);
+      filter: grayscale(1) brightness(0.5);
+       image-rendering: pixelated;
     }
 
-    .activo .icono-logro {
-      filter: grayscale(0) brightness(0.95);
+    .activo .icono {
+      filter: grayscale(0) brightness(1);
       box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
+       image-rendering: pixelated;
     }
 
     .palanca {
@@ -94,7 +98,7 @@
       background-color: #00c96b;
     }
 
-    .rectangulo-estado {
+    .estado {
       width: 40px;
       height: 20px;
       background-color: #e74c3c;
@@ -104,7 +108,7 @@
       border-radius: 3px;
     }
 
-    .activo .rectangulo-estado {
+    .activo .estado {
       background-color: #27ae60;
       transform: scale(1.2);
     }
@@ -122,7 +126,7 @@
       display: none;
     }
 
-    .logro-sistema:hover .tooltip {
+    .logro:hover .tooltip {
       display: block;
     }
 
@@ -150,28 +154,29 @@
     desactivar: new Howl({ src: ['desactivar.wav'] })
   };
 
-  for (let i = 1; i <= 97; i++) {  // Ahora va hasta 97
+  for (let i = 1; i <= 97; i++) {
     const logro = document.createElement('div');
-    logro.className = 'logro-sistema';
+    logro.className = 'logro';
     if (saved[i]) logro.classList.add('activo');
 
     const tooltip = document.createElement('div');
     tooltip.className = 'tooltip';
+    tooltip.textContent = `Logro número ${String(i).padStart(4, '0')}`;
 
     const icono = document.createElement('div');
-    icono.className = 'icono-logro';
-    icono.style.backgroundImage = `url('./${String(i).padStart(4, '0')}.webp')`;  // Busca en la misma carpeta
+    icono.className = 'icono';
+    icono.style.backgroundImage = `url('./${String(i).padStart(4, '0')}.webp')`;
 
     const palanca = document.createElement('div');
     palanca.className = 'palanca';
 
-    const rect = document.createElement('div');
-    rect.className = 'rectangulo-estado';
+    const estado = document.createElement('div');
+    estado.className = 'estado';
 
     logro.appendChild(tooltip);
     logro.appendChild(icono);
     logro.appendChild(palanca);
-    logro.appendChild(rect);
+    logro.appendChild(estado);
     document.body.appendChild(logro);
 
     logro.addEventListener('click', () => {
