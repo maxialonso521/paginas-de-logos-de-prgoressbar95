@@ -36,6 +36,7 @@
       position: relative;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       overflow: hidden;
+    
     }
 
     .logro:hover {
@@ -54,12 +55,14 @@
       border: 3px solid #ecf0f1;
       box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
       transition: all 0.5s ease;
-      filter: grayscale(1) brightness(0.8);
+      filter: grayscale(1) brightness(0.5);
+       image-rendering: pixelated;
     }
 
     .activo .icono {
-      filter: grayscale(0) brightness(0.95);
+      filter: grayscale(0) brightness(1);
       box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
+       image-rendering: pixelated;
     }
 
     .palanca {
