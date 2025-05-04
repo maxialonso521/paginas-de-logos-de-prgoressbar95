@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Logros Retro Style</title>
-  <link rel="icon" href="Logros/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <style>
     body {
       background: linear-gradient(to bottom, #c0c0c0, #a0a0a0);
@@ -99,18 +99,20 @@
       transform: scale(1.1);
     }
   </style>
-
-  <!-- Sonidos 🎵 -->
-  <audio id="sonido-activar" src="Logros/activar.wav" preload="auto"></audio>
-  <audio id="sonido-desactivar" src="Logros/desactivar.wav" preload="auto"></audio>
 </head>
 <body>
-  <script>
-    const saved = JSON.parse(localStorage.getItem('logros') || {});
+  <!-- Sonidos -->
+  <audio id="sonido-activar" src="activar.wav" preload="auto"></audio>
+  <audio id="sonido-desactivar" src="desactivar.wav" preload="auto"></audio>
 
+  <script>
     const sonidoActivar = document.getElementById('sonido-activar');
     const sonidoDesactivar = document.getElementById('sonido-desactivar');
 
+    // Cargar estado desde localStorage o inicializarlo
+    const saved = JSON.parse(localStorage.getItem('logros') || '{}');
+
+    // Alternar y guardar estado de un logro
     function alternarLogro(elem, id) {
       saved[id] = !saved[id];
       localStorage.setItem('logros', JSON.stringify(saved));
@@ -125,7 +127,7 @@
       }
     }
 
-    // Generar logros del 001 al 097 (incluido el 093 ahora)
+    // Crear todos los logros (del 1 al 97)
     for (let i = 1; i <= 97; i++) {
       const num = i.toString().padStart(4, '0');
       const id  = `logro-${num}`;
@@ -137,7 +139,7 @@
 
       const icon = document.createElement('div');
       icon.className = 'icono-logro';
-      icon.style.backgroundImage = `url('Logros/${num}.webp')`;
+      icon.style.backgroundImage = `url('${num}.webp')`;
       icon.title = `Logro ${num}`;
 
       const palanca = document.createElement('div');
