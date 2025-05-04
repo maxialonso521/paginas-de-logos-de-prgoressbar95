@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Logros Retro Style</title>
-  <!-- Favicon en .ico -->
   <link rel="icon" href="Logros/favicon.ico" type="image/x-icon">
   <style>
     body {
@@ -44,13 +43,11 @@
       background-position: center;
       border: 3px solid #000;
       margin-bottom: 10px;
-      transition: filter 0.3s ease, transform 0.3s ease;
-      /* Empieza en escala de grises */
-      filter: grayscale(100%);
-      image-rendering: pixelated; /* Efecto pixeleado */
+      filter: grayscale(1);
+      image-rendering: pixelated;
+      transition: filter 0.3s ease, transform 0.5s ease;
     }
 
-    /* Al estar activo: color + giro */
     .activo .icono-logro {
       filter: grayscale(0%);
       transform: rotate(360deg);
@@ -83,7 +80,6 @@
       transition: top 0.3s ease, background-color 0.3s ease;
     }
 
-    /* Palanca activa en posición baja + verde */
     .activo .palanca::after {
       top: 50px;
       background-color: limegreen;
@@ -98,7 +94,6 @@
       transition: background-color 0.3s ease, transform 0.3s ease;
     }
 
-    /* Estado activo en verde esmeralda */
     .activo .rectangulo-estado {
       background-color: #00c96b;
       transform: scale(1.1);
@@ -107,45 +102,35 @@
 </head>
 <body>
   <script>
-    // Carga el objeto de logros guardados (o inicializa vacío)
     const saved = JSON.parse(localStorage.getItem('logros') || '{}');
 
-    // Alterna y guarda el estado de un logro
     function alternarLogro(elem, id) {
       saved[id] = !saved[id];
       localStorage.setItem('logros', JSON.stringify(saved));
       elem.classList.toggle('activo', saved[id]);
     }
 
-    // Genera los 107 logros
-    for (let i = 1; i <= 107; i++) {
+    for (let i = 1; i <= 97; i++) {
       const num = i.toString().padStart(4, '0');
-      const id  = `logro-${num}`;
+      const id = `logro-${num}`;
 
-      // Contenedor principal
       const cont = document.createElement('div');
       cont.className = 'logro-sistema';
-      // Aplica estado guardado
       if (saved[id]) cont.classList.add('activo');
-      // Click en todo el contenedor
       cont.addEventListener('click', () => alternarLogro(cont, id));
 
-      // Ícono
       const icon = document.createElement('div');
       icon.className = 'icono-logro';
       icon.style.backgroundImage = `url('Logros/${num}.webp')`;
       icon.title = `Logro ${num}`;
 
-      // Palanca
-      const pal = document.createElement('div');
-      pal.className = 'palanca';
+      const palanca = document.createElement('div');
+      palanca.className = 'palanca';
 
-      // Rectángulo de estado
       const rect = document.createElement('div');
       rect.className = 'rectangulo-estado';
 
-      // Monta la estructura
-      cont.append(icon, pal, rect);
+      cont.append(icon, palanca, rect);
       document.body.appendChild(cont);
     }
   </script>
