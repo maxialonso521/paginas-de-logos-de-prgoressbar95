@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Logros Retro Mejorado</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Catálogo de logros de Progressbar 95</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <style>
     body {
       background: linear-gradient(to bottom, #2c3e50, #34495e);
@@ -31,14 +34,12 @@
       cursor: pointer;
       position: relative;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      opacity: 0.8;
       overflow: hidden;
     }
 
     .logro-sistema:hover {
       transform: translateY(-10px);
       box-shadow: 0 0 20px rgba(236, 240, 241, 0.8);
-      opacity: 1;
     }
 
     .icono-logro {
@@ -47,14 +48,17 @@
       background-color: #34495e;
       background-size: cover;
       background-position: center;
-      border-radius: 50%;
+      border-radius: 50%; /* Cambiado a círculo */
       margin-bottom: 10px;
-      transition: transform 0.5s ease, filter 0.5s ease;
+      border: 3px solid #ecf0f1;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+      transition: all 0.5s ease;
+      filter: grayscale(1) brightness(0.8);
     }
 
     .activo .icono-logro {
-      filter: brightness(1.5);
-      transform: scale(1.1) rotate(360deg);
+      filter: grayscale(0) brightness(0.95);
+      box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
     }
 
     .palanca {
@@ -122,18 +126,6 @@
       display: block;
     }
 
-    /* Efecto de explosión */
-    @keyframes explosion {
-      0% {
-        transform: scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: scale(1.5);
-        opacity: 0;
-      }
-    }
-
     .explosion {
       animation: explosion 0.6s forwards;
       position: absolute;
@@ -144,63 +136,51 @@
       box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
     }
 
+    @keyframes explosion {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
   </style>
 </head>
 <body>
-  <script>
-    const saved = JSON.parse(localStorage.getItem('logros') || '{}');
-    const sonidos = {
-      activar: new Audio('activar.wav'),
-      desactivar: new Audio('desactivar.wav'),
-      explosion: new Audio('explosion.wav')
-    };
+<script>
+  const saved = JSON.parse(localStorage.getItem('logros') || '{}');
+  const sonidos = {
+    activar: new Howl({ src: ['activar.wav'] }),
+    desactivar: new Howl({ src: ['desactivar.wav'] })
+  };
 
-    function alternarLogro(elem, id) {
-      saved[id] = !saved[id];
+  for (let i = 1; i <= 97; i++) {  // Ahora va hasta 97
+    const logro = document.createElement('div');
+    logro.className = 'logro-sistema';
+    if (saved[i]) logro.classList.add('activo');
+
+    const tooltip = document.createElement('div');
+    tooltip.className = 'tooltip';
+
+    const icono = document.createElement('div');
+    icono.className = 'icono-logro';
+    icono.style.backgroundImage = `url('./${String(i).padStart(4, '0')}.webp')`;  // Busca en la misma carpeta
+
+    const palanca = document.createElement('div');
+    palanca.className = 'palanca';
+
+    const rect = document.createElement('div');
+    rect.className = 'rectangulo-estado';
+
+    logro.appendChild(tooltip);
+    logro.appendChild(icono);
+    logro.appendChild(palanca);
+    logro.appendChild(rect);
+    document.body.appendChild(logro);
+
+    logro.addEventListener('click', () => {
+      const activo = logro.classList.toggle('activo');
+      saved[i] = activo;
       localStorage.setItem('logros', JSON.stringify(saved));
-      elem.classList.toggle('activo', saved[id]);
-
-      // Reproducir sonido
-      const sonido = saved[id] ? sonidos.activar : sonidos.desactivar;
-      sonido.currentTime = 0;
-      sonido.play();
-
-      // Efecto de explosión
-      if (saved[id]) {
-        const explosion = document.createElement('div');
-        explosion.classList.add('explosion');
-        elem.appendChild(explosion);
-        setTimeout(() => explosion.remove(), 600);
-      }
-    }
-
-    for (let i = 1; i <= 97; i++) {
-      const num = i.toString().padStart(4, '0');
-      const id  = `logro-${num}`;
-
-      const cont = document.createElement('div');
-      cont.className = 'logro-sistema';
-      if (saved[id]) cont.classList.add('activo');
-      cont.addEventListener('click', () => alternarLogro(cont, id));
-
-      const icon = document.createElement('div');
-      icon.className = 'icono-logro';
-      icon.style.backgroundImage = `url('C:/Users/maxim/OneDrive/Documentos/GitHub/${num}.webp')`;
-      icon.title = `Logro ${num}`;
-
-      const palanca = document.createElement('div');
-      palanca.className = 'palanca';
-
-      const rect = document.createElement('div');
-      rect.className = 'rectangulo-estado';
-
-      const tooltip = document.createElement('div');
-      tooltip.className = 'tooltip';
-      tooltip.textContent = `Logro número ${num}: Descripción o detalle.`;
-
-      cont.append(icon, palanca, rect, tooltip);
-      document.body.appendChild(cont);
-    }
-  </script>
+      (activo ? sonidos.activar : sonidos.desactivar).play();
+    });
+  }
+</script>
 </body>
 </html>
