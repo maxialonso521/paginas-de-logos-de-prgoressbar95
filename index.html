@@ -2,11 +2,11 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Logros Retro</title>
+  <title>Logros Retro Style</title>
   <link rel="icon" href="Logros/favicon.ico" type="image/x-icon">
   <style>
     body {
-      background: linear-gradient(to bottom, #b0b0b0, #909090);
+      background: linear-gradient(to bottom, #c0c0c0, #a0a0a0);
       font-family: 'Courier New', monospace;
       display: flex;
       flex-wrap: wrap;
@@ -19,34 +19,33 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      background: #dcdcdc;
-      border: 3px ridge #777;
-      padding: 12px;
+      background: #e0e0e0;
+      border: 3px solid #888;
+      padding: 10px;
       border-radius: 10px;
-      box-shadow: 0 0 12px #444;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 15px #333;
+      transition: transform 0.3s ease;
       margin: 10px;
       width: 120px;
       cursor: pointer;
-      position: relative;
     }
 
     .logro-sistema:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 0 20px #111;
+      transform: translateY(-10px);
+      box-shadow: 0 0 25px #888;
     }
 
     .icono-logro {
       width: 80px;
       height: 80px;
-      background-color: #555;
+      background-color: #444;
       background-size: cover;
       background-position: center;
       border: 3px solid #000;
       margin-bottom: 10px;
       filter: grayscale(1);
       image-rendering: pixelated;
-      transition: filter 0.3s ease, transform 0.4s ease;
+      transition: filter 0.3s ease, transform 0.5s ease;
     }
 
     .activo .icono-logro {
@@ -66,7 +65,7 @@
 
     .palanca:hover {
       background-color: #444;
-      transform: translateY(-4px);
+      transform: translateY(-5px);
     }
 
     .palanca::after {
@@ -99,40 +98,42 @@
       background-color: #00c96b;
       transform: scale(1.1);
     }
-
-    .titulo-logro {
-      margin-top: 5px;
-      font-size: 14px;
-      text-align: center;
-      color: #222;
-      background: #eee;
-      padding: 2px 6px;
-      border: 1px solid #aaa;
-      border-radius: 5px;
-      box-shadow: inset 0 0 3px #fff;
-    }
   </style>
+
+  <!-- Sonidos 🎵 -->
+  <audio id="sonido-activar" src="Logros/activar.wav" preload="auto"></audio>
+  <audio id="sonido-desactivar" src="Logros/desactivar.wav" preload="auto"></audio>
 </head>
 <body>
   <script>
-    const saved = JSON.parse(localStorage.getItem('logros') || '{}');
+    const saved = JSON.parse(localStorage.getItem('logros') || {});
+
+    const sonidoActivar = document.getElementById('sonido-activar');
+    const sonidoDesactivar = document.getElementById('sonido-desactivar');
 
     function alternarLogro(elem, id) {
       saved[id] = !saved[id];
       localStorage.setItem('logros', JSON.stringify(saved));
       elem.classList.toggle('activo', saved[id]);
+
+      if (saved[id]) {
+        sonidoActivar.currentTime = 0;
+        sonidoActivar.play();
+      } else {
+        sonidoDesactivar.currentTime = 0;
+        sonidoDesactivar.play();
+      }
     }
 
+    // Generar logros del 001 al 097 (incluido el 093 ahora)
     for (let i = 1; i <= 97; i++) {
       const num = i.toString().padStart(4, '0');
-      const id = `logro-${num}`;
+      const id  = `logro-${num}`;
 
       const cont = document.createElement('div');
       cont.className = 'logro-sistema';
       if (saved[id]) cont.classList.add('activo');
       cont.addEventListener('click', () => alternarLogro(cont, id));
-      cont.setAttribute('aria-label', `Logro ${num}`);
-      cont.setAttribute('title', `Logro ${num}`);
 
       const icon = document.createElement('div');
       icon.className = 'icono-logro';
@@ -145,11 +146,7 @@
       const rect = document.createElement('div');
       rect.className = 'rectangulo-estado';
 
-      const titulo = document.createElement('div');
-      titulo.className = 'titulo-logro';
-      titulo.textContent = `#${num}`;
-
-      cont.append(icon, palanca, rect, titulo);
+      cont.append(icon, palanca, rect);
       document.body.appendChild(cont);
     }
   </script>
