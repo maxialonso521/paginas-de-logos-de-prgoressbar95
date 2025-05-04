@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -157,11 +157,10 @@
 
     const tooltip = document.createElement('div');
     tooltip.className = 'tooltip';
-    tooltip.textContent = `logro numero ${String(i).padStart(4, '0')}:`; // Formato de 4 dígitos
 
     const icono = document.createElement('div');
     icono.className = 'icono-logro';
-    icono.style.backgroundImage = `url('C:/Users/maxim/OneDrive/Documentos/GitHub/${String(i).padStart(4, '0')}.webp')`;  // Ruta ajustada con formato de 4 dígitos
+    icono.style.backgroundImage = `url('./${String(i).padStart(4, '0')}.webp')`;  // Busca en la misma carpeta
 
     const palanca = document.createElement('div');
     palanca.className = 'palanca';
@@ -184,3 +183,4 @@
   }
 </script>
 </body>
+</html>
