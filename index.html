@@ -2,151 +2,151 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Logros Retro Style</title>
-  <link rel="icon" href="favicon.ico" />
+  <title>Logros Retro Mejorado</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
-      margin: 0;
       background: linear-gradient(to bottom, #c0c0c0, #a0a0a0);
       font-family: 'Courier New', monospace;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       padding: 20px;
-      gap: 15px;
+      margin: 0;
     }
 
     .logro {
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 120px;
-      padding: 10px;
-      border-radius: 10px;
       background: #e0e0e0;
-      border: 3px solid #666;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 3px solid #888;
+      border-radius: 12px;
+      padding: 12px;
+      margin: 10px;
+      width: 120px;
+      box-shadow: 0 0 12px #222;
+      transition: transform 0.3s ease;
       cursor: pointer;
     }
 
     .logro:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-    }
-
-    .logro.activo {
-      background: #d0ffd0;
-      border-color: #33cc66;
+      transform: translateY(-8px);
+      box-shadow: 0 0 20px #555;
     }
 
     .icono {
       width: 80px;
       height: 80px;
-      border: 2px solid #000;
+      background-color: #444;
       background-size: cover;
       background-position: center;
-      margin-bottom: 8px;
+      border: 2px solid #000;
+      margin-bottom: 10px;
+      filter: grayscale(1);
       image-rendering: pixelated;
-      filter: grayscale(100%);
-      transition: filter 0.4s ease, transform 0.6s ease;
+      transition: filter 0.3s ease, transform 0.5s ease;
     }
 
-    .logro.activo .icono {
+    .activo .icono {
       filter: grayscale(0%);
-      transform: rotateY(360deg);
+      transform: rotate(360deg);
     }
 
     .palanca {
       width: 60px;
-      height: 90px;
-      background: #555;
-      border: 2px solid #111;
+      height: 100px;
+      background-color: #666;
+      border: 2px solid #222;
       position: relative;
-      margin-bottom: 8px;
-      border-radius: 4px;
+      margin-bottom: 10px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .palanca:hover {
+      background-color: #444;
+      transform: translateY(-5px);
     }
 
     .palanca::after {
       content: '';
       position: absolute;
+      width: 20px;
+      height: 40px;
+      background-color: #222;
       top: 10px;
       left: 50%;
-      width: 20px;
-      height: 35px;
-      background: #222;
       transform: translateX(-50%);
-      transition: top 0.3s ease, background 0.3s ease;
+      transition: top 0.3s ease, background-color 0.3s ease;
     }
 
-    .logro.activo .palanca::after {
-      top: 45px;
-      background: #0f0;
+    .activo .palanca::after {
+      top: 50px;
+      background-color: limegreen;
     }
 
     .estado {
       width: 40px;
       height: 20px;
+      background-color: red;
       border: 2px solid #000;
-      background: red;
-      box-shadow: inset 0 0 4px rgba(0,0,0,0.5);
-      transition: background 0.3s ease, transform 0.3s ease;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s ease, transform 0.3s ease;
     }
 
-    .logro.activo .estado {
-      background: #0c6;
+    .activo .estado {
+      background-color: #00c96b;
       transform: scale(1.1);
     }
   </style>
 </head>
 <body>
-  <!-- Sonidos -->
-  <audio id="sonido-on" src="activar.wav" preload="auto"></audio>
-  <audio id="sonido-off" src="desactivar.wav" preload="auto"></audio>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
   <script>
-    const activar = document.getElementById("sonido-on");
-    const desactivar = document.getElementById("sonido-off");
-    const guardados = JSON.parse(localStorage.getItem("logros") || "{}");
+    const basePath = "."; // Punto actual: C:\Users\maxim\OneDrive\Documentos\GitHub
 
-    function alternar(elem, id) {
-      guardados[id] = !guardados[id];
-      localStorage.setItem("logros", JSON.stringify(guardados));
-      elem.classList.toggle("activo", guardados[id]);
-      const sonido = guardados[id] ? activar : desactivar;
-      sonido.currentTime = 0;
-      sonido.play();
+    // Sonidos
+    const sonidoOn = new Howl({ src: [`${basePath}/sonido_on.wav`] });
+    const sonidoOff = new Howl({ src: [`${basePath}/sonido_off.wav`] });
+
+    const saved = JSON.parse(localStorage.getItem('logros') || '{}');
+
+    function alternarLogro(elem, id) {
+      const activo = !saved[id];
+      saved[id] = activo;
+      localStorage.setItem('logros', JSON.stringify(saved));
+      elem.classList.toggle('activo', activo);
+      if (activo) sonidoOn.play();
+      else sonidoOff.play();
     }
 
     function crearLogro(i) {
-      const num = i.toString().padStart(4, "0");
+      const num = i.toString().padStart(4, '0');
       const id = `logro-${num}`;
 
-      const div = document.createElement("div");
-      div.className = "logro";
-      if (guardados[id]) div.classList.add("activo");
-      div.onclick = () => alternar(div, id);
+      const cont = document.createElement('div');
+      cont.className = 'logro';
+      if (saved[id]) cont.classList.add('activo');
+      cont.addEventListener('click', () => alternarLogro(cont, id));
 
-      const icono = document.createElement("div");
-      icono.className = "icono";
-      icono.style.backgroundImage = `url('${num}.webp')`;
-      icono.title = `Logro ${num}`;
+      const icon = document.createElement('div');
+      icon.className = 'icono';
+      icon.style.backgroundImage = `url('${basePath}/Logros/${num}.webp')`;
+      icon.title = `Logro ${num}`;
 
-      const palanca = document.createElement("div");
-      palanca.className = "palanca";
+      const palanca = document.createElement('div');
+      palanca.className = 'palanca';
 
-      const estado = document.createElement("div");
-      estado.className = "estado";
+      const estado = document.createElement('div');
+      estado.className = 'estado';
 
-      div.append(icono, palanca, estado);
-      document.body.appendChild(div);
+      cont.append(icon, palanca, estado);
+      document.body.appendChild(cont);
     }
 
-    for (let i = 1; i <= 97; i++) crearLogro(i);
+    for (let i = 1; i <= 97; i++) {
+      crearLogro(i);
+    }
   </script>
 </body>
 </html>
