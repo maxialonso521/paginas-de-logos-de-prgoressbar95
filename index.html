@@ -4,12 +4,11 @@
   <meta charset="UTF-8" />
   <title>Logros de Progressbar95</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="https://raw.githubusercontent.com/maxialonso521/paginas-de-logos-de-prgoressbar95/main/favicon.ico" type="image/x-icon" />
   <script src="https://unpkg.com/howler"></script>
   <script src="https://unpkg.com/gsap@3"></script>
   <style>
     body {
-      background: linear-gradient(to bottom, #2d3748, #1a202c);
+      background: linear-gradient(to bottom, #111827, #1a202c);
       font-family: 'Courier New', monospace;
       color: white;
       display: flex;
@@ -17,6 +16,7 @@
       justify-content: center;
       margin: 0;
       padding: 1.25rem;
+      overflow-x: hidden;
     }
 
     .logro {
@@ -31,19 +31,13 @@
       width: 140px;
       cursor: pointer;
       position: relative;
-
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      overflow: hidden;
-    
-
       opacity: 0;
       transform: translateY(50px);
       transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
-
     }
 
     .logro:hover {
-      transform: translateY(-0.5rem) scale(1.03);
+      transform: translateY(-0.5rem) scale(1.05);
       box-shadow: 0 12px 20px rgba(0,0,0,0.5);
     }
 
@@ -53,24 +47,6 @@
       background-color: #4a5568;
       background-size: cover;
       background-position: center;
-
-      border-radius: 50%;
-      margin-bottom: 10px;
-      border: 3px solid #ecf0f1;
-      box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
-      transition: all 0.5s ease;
-
-      filter: grayscale(1) brightness(0.5);
-       image-rendering: pixelated;
-    }
-
-    .activo .icono {
-      filter: grayscale(0) brightness(1);
-      box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
-       image-rendering: pixelated;
-
-      filter: grayscale(1) brightness(0.8);
-
       border-radius: 9999px;
       margin-bottom: 0.75rem;
       border: 2px solid #e5e7eb;
@@ -78,7 +54,6 @@
       filter: grayscale(1) brightness(0.5);
       transition: filter 0.5s, box-shadow 0.5s;
       image-rendering: pixelated;
-
     }
 
     .logro.activo .icono {
@@ -98,23 +73,13 @@
       left: 50%;
       transform: translateX(-50%);
       display: none;
+      white-space: nowrap;
     }
 
     .logro:hover .tooltip {
       display: block;
     }
 
-    .particula {
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      background-color: #00ff99;
-      border-radius: 9999px;
-      pointer-events: none;
-      z-index: 999;
-    }
-
-    /* Palanca */
     .palanca {
       width: 60px;
       height: 100px;
@@ -165,6 +130,28 @@
       transform: scale(1.2);
       box-shadow: 0 0 6px #22c55e;
     }
+
+    .particula {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background-color: #00ff99;
+      border-radius: 9999px;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .doom {
+      animation: doomShake 0.15s infinite;
+    }
+
+    @keyframes doomShake {
+      0% { transform: translate(1px, 1px) rotate(0deg); }
+      25% { transform: translate(-1px, 2px) rotate(-1deg); }
+      50% { transform: translate(-3px, 1px) rotate(1deg); }
+      75% { transform: translate(3px, -2px) rotate(0deg); }
+      100% { transform: translate(1px, -1px) rotate(1deg); }
+    }
   </style>
 </head>
 <body>
@@ -174,27 +161,37 @@
   const baseURL = 'https://raw.githubusercontent.com/maxialonso521/paginas-de-logos-de-prgoressbar95/main/';
   const sonidos = {
     activar: new Howl({ src: [baseURL + 'activar.wav'] }),
-    desactivar: new Howl({ src: [baseURL + 'desactivar.wav'] })
+    desactivar: new Howl({ src: [baseURL + 'desactivar.wav'] }),
+    doom: new Howl({ src: [baseURL + 'doom.wav'], volume: 1.0 })
   };
 
-  function crearParticulas(x, y, container) {
-    for (let i = 0; i < 20; i++) {
+  function crearParticulas(x, y, container, color = '#00ff99', cantidad = 20, velocidad = 1) {
+    for (let i = 0; i < cantidad; i++) {
       const p = document.createElement('div');
       p.className = 'particula';
       p.style.left = `${x}px`;
       p.style.top = `${y}px`;
+      p.style.backgroundColor = color;
       container.appendChild(p);
 
       gsap.to(p, {
-        x: (Math.random() - 0.5) * 100,
-        y: (Math.random() - 0.5) * 100,
+        x: (Math.random() - 0.5) * 200 * velocidad,
+        y: (Math.random() - 0.5) * 200 * velocidad,
         scale: Math.random() * 2 + 0.5,
-        duration: Math.random() * 0.5 + 0.5,
+        duration: Math.random() * 0.6 + 0.4,
         opacity: 0,
         ease: 'power2.out',
         onComplete: () => p.remove()
       });
     }
+  }
+
+  function activarDoom(logro) {
+    sonidos.doom.play();
+    document.body.classList.add('doom');
+    crearParticulas(70, 70, logro, '#ff0044', 80, 2);
+
+    setTimeout(() => document.body.classList.remove('doom'), 1000);
   }
 
   for (let i = 1; i <= 97; i++) {
@@ -204,7 +201,8 @@
     if (saved[i]) logro.classList.add('activo');
 
     const tooltip = document.createElement('div');
-
+    tooltip.className = 'tooltip';
+    tooltip.textContent = `Logro número ${id}`;
 
     const icono = document.createElement('div');
     icono.className = 'icono';
@@ -219,7 +217,6 @@
     logro.append(tooltip, icono, palanca, estado);
     document.body.appendChild(logro);
 
-    // Animación de entrada con GSAP
     gsap.to(logro, {
       opacity: 1,
       y: 0,
@@ -232,9 +229,9 @@
       const activo = logro.classList.toggle('activo');
       saved[i] = activo;
       localStorage.setItem('logros', JSON.stringify(saved));
+
       (activo ? sonidos.activar : sonidos.desactivar).play();
 
-      // Vibración de logro
       gsap.fromTo(logro, { x: -3 }, {
         x: 3,
         duration: 0.1,
@@ -243,9 +240,13 @@
         ease: "power1.inOut"
       });
 
+      const rect = logro.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
       if (activo) {
-        const rect = logro.getBoundingClientRect();
-        crearParticulas(e.clientX - rect.left, e.clientY - rect.top, logro);
+        crearParticulas(x, y, logro);
+        if (id === '0666') activarDoom(logro);
       }
     });
   }
