@@ -1,118 +1,69 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Catálogo de Logros de Progressbar 95</title>
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <meta charset="UTF-8">
+  <title>Mi Página de Logros</title>
   <style>
     body {
-      @apply bg-gradient-to-b from-gray-800 to-gray-900 font-mono text-white flex flex-wrap justify-center p-5 m-0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #222;
+      color: white;
+      margin: 0;
+      padding: 20px;
     }
-
     .logro {
-      @apply flex flex-col items-center bg-gray-800 border-4 border-gray-200 rounded-lg shadow-lg m-2 w-[140px] cursor-pointer relative transition-transform duration-300 ease-in-out;
+      display: flex;
+      align-items: center;
+      background: #333;
+      border: 1px solid #444;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      padding: 10px;
+      box-shadow: 0 0 10px #000a;
     }
-
-    .logro:hover {
-      @apply -translate-y-2 shadow-xl;
+    .logro img {
+      width: 64px;
+      height: 64px;
+      margin-right: 12px;
     }
-
-    .icono {
-      @apply w-[80px] h-[80px] bg-gray-700 bg-cover bg-center rounded-full mb-3 border-2 border-gray-200 shadow-md transition duration-500 grayscale brightness-50;
-      image-rendering: pixelated;
-    }
-
-    .logro.activo .icono {
-      @apply grayscale-0 brightness-100 shadow-xl;
-    }
-
-    .palanca {
-      @apply w-[60px] h-[100px] bg-gray-400 border-2 border-gray-500 rounded-md mb-2 relative transition duration-300;
-    }
-
-    .palanca:hover {
-      @apply bg-gray-500 -translate-y-1;
-    }
-
-    .palanca::after {
-      content: '';
-      @apply absolute w-5 h-10 bg-gray-500 top-2 left-1/2 -translate-x-1/2 transition-all duration-300;
-    }
-
-    .logro.activo .palanca::after {
-      top: 50px;
-      background-color: #00c96b;
-    }
-
-    .estado {
-      @apply w-10 h-5 bg-red-600 border-2 border-red-800 rounded shadow-md transition-all duration-300;
-    }
-
-    .logro.activo .estado {
-      @apply bg-green-600 scale-110;
-    }
-
-    .tooltip {
-      @apply absolute text-xs bg-black bg-opacity-70 text-white p-1 rounded top-[-30px] left-1/2 transform -translate-x-1/2 hidden;
-    }
-
-    .logro:hover .tooltip {
-      @apply block;
-    }
-
-    .explosion {
-      animation: explosion 0.6s forwards;
-      @apply absolute w-[100px] h-[100px] bg-red-500 rounded-full shadow-lg;
-    }
-
-    @keyframes explosion {
-      0% { transform: scale(1); opacity: 1; }
-      100% { transform: scale(1.5); opacity: 0; }
+    .logro span {
+      flex: 1;
     }
   </style>
 </head>
 <body>
-<script>
-  const saved = JSON.parse(localStorage.getItem('logros') || '{}');
-  const sonidos = {
-    activar: new Howl({ src: ['activar.wav'] }),
-    desactivar: new Howl({ src: ['desactivar.wav'] })
-  };
+  <h1>🎉 Mis Logros Retro Progressbar95 🎉</h1>
+  <div id="contenedor-logros"></div>
 
-  for (let i = 1; i <= 97; i++) {
-    const id = String(i).padStart(4, '0');
-    const logro = document.createElement('div');
-    logro.className = 'logro';
-    if (saved[i]) logro.classList.add('activo');
+  <script>
+    const contenedor = document.getElementById('contenedor-logros');
+    const totalLogros = 97;
 
-    const tooltip = document.createElement('div');
-    tooltip.className = 'tooltip';
-    tooltip.textContent = `Logro número ${id}`;
+    for (let i = 1; i <= totalLogros; i++) {
+      const numero = i.toString().padStart(4, '0');
+      const div = document.createElement('div');
+      div.className = 'logro';
 
-    const icono = document.createElement('div');
-    icono.className = 'icono';
-    icono.style.backgroundImage = `url('./${id}.webp')`;
+      const img = document.createElement('img');
+      img.src = `assets/${numero}.webp`;
+      img.alt = `Logro ${numero}`;
+      img.onerror = () => img.style.display = 'none';
 
-    const palanca = document.createElement('div');
-    palanca.className = 'palanca';
+      const span = document.createElement('span');
+      span.textContent = `Logro número ${numero}`;
 
-    const estado = document.createElement('div');
-    estado.className = 'estado';
+      const audio = document.createElement('audio');
+      audio.src = `assets/${numero}.wav`;
+      audio.preload = 'auto';
 
-    logro.append(tooltip, icono, palanca, estado);
-    document.body.appendChild(logro);
+      div.onclick = () => audio.play();
 
-    logro.addEventListener('click', () => {
-      const activo = logro.classList.toggle('activo');
-      saved[i] = activo;
-      localStorage.setItem('logros', JSON.stringify(saved));
-      (activo ? sonidos.activar : sonidos.desactivar).play();
-    });
-  }
-</script>
+      div.appendChild(img);
+      div.appendChild(span);
+      div.appendChild(audio);
+
+      contenedor.appendChild(div);
+    }
+  </script>
 </body>
 </html>
