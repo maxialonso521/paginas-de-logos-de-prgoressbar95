@@ -1,68 +1,71 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Mi Página de Logros</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mis Logros de Progressbar95 🎖️</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #222;
-      color: white;
-      margin: 0;
+      background: #121212;
+      color: #fff;
+      font-family: sans-serif;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
       padding: 20px;
     }
     .logro {
-      display: flex;
-      align-items: center;
-      background: #333;
-      border: 1px solid #444;
-      border-radius: 12px;
-      margin-bottom: 12px;
+      background: #1e1e1e;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      margin: 10px;
       padding: 10px;
-      box-shadow: 0 0 10px #000a;
+      width: 150px;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+    .logro:hover {
+      transform: scale(1.05);
     }
     .logro img {
-      width: 64px;
-      height: 64px;
-      margin-right: 12px;
+      width: 128px;
+      height: 128px;
+      object-fit: contain;
     }
-    .logro span {
-      flex: 1;
+    audio {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <h1>🎉 Mis Logros Retro Progressbar95 🎉</h1>
-  <div id="contenedor-logros"></div>
-
   <script>
-    const contenedor = document.getElementById('contenedor-logros');
-    const totalLogros = 97;
+    const baseUrl = "https://raw.githubusercontent.com/maxialonso521/paginas-de-logos-de-prgoressbar95/main/Logros/";
 
-    for (let i = 1; i <= totalLogros; i++) {
-      const numero = i.toString().padStart(4, '0');
-      const div = document.createElement('div');
-      div.className = 'logro';
+    for (let i = 1; i <= 97; i++) {
+      const nombre = i.toString().padStart(4, '0');
 
-      const img = document.createElement('img');
-      img.src = `assets/${numero}.webp`;
-      img.alt = `Logro ${numero}`;
-      img.onerror = () => img.style.display = 'none';
+      const contenedor = document.createElement("div");
+      contenedor.className = "logro";
 
-      const span = document.createElement('span');
-      span.textContent = `Logro número ${numero}`;
+      const imagen = document.createElement("img");
+      imagen.src = `${baseUrl}${nombre}.webp`;
+      imagen.alt = `Logro ${nombre}`;
+      contenedor.appendChild(imagen);
 
-      const audio = document.createElement('audio');
-      audio.src = `assets/${numero}.wav`;
-      audio.preload = 'auto';
+      const texto = document.createElement("div");
+      texto.textContent = `Logro número ${nombre}`;
+      contenedor.appendChild(texto);
 
-      div.onclick = () => audio.play();
+      const audio = document.createElement("audio");
+      audio.src = `${baseUrl}${nombre}.wav`;
+      contenedor.appendChild(audio);
 
-      div.appendChild(img);
-      div.appendChild(span);
-      div.appendChild(audio);
+      contenedor.addEventListener("click", () => {
+        audio.currentTime = 0;
+        audio.play();
+      });
 
-      contenedor.appendChild(div);
+      document.body.appendChild(contenedor);
     }
   </script>
 </body>
