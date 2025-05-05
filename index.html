@@ -2,54 +2,57 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Catálogo de Logros de Progressbar 95</title>
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <title>Logros de Progressbar95</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://unpkg.com/howler"></script>
+  <script src="https://unpkg.com/gsap@3"></script>
   <style>
-    /* Estilos personalizados */
     body {
-      background: linear-gradient(to bottom, #2c3e50, #34495e);
+      background: linear-gradient(to bottom, #2d3748, #1a202c);
       font-family: 'Courier New', monospace;
+      color: white;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      padding: 20px;
       margin: 0;
-      color: white;
+      padding: 1.25rem;
     }
 
     .logro {
       display: flex;
       flex-direction: column;
       align-items: center;
-      background: rgba(44, 62, 80, 0.9);
-      border: 3px solid #ecf0f1;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px #333;
-      margin: 10px;
+      background-color: #2d3748;
+      border: 4px solid #e5e7eb;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      margin: 0.5rem;
       width: 140px;
       cursor: pointer;
       position: relative;
+
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       overflow: hidden;
     
+
+      opacity: 0;
+      transform: translateY(50px);
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+
     }
 
     .logro:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 0 20px rgba(236, 240, 241, 0.8);
+      transform: translateY(-0.5rem) scale(1.03);
+      box-shadow: 0 12px 20px rgba(0,0,0,0.5);
     }
 
-    .icono {
+    .logro .icono {
       width: 80px;
       height: 80px;
-      background-color: #34495e;
+      background-color: #4a5568;
       background-size: cover;
       background-position: center;
+
       border-radius: 50%;
       margin-bottom: 10px;
       border: 3px solid #ecf0f1;
@@ -66,71 +69,33 @@
        image-rendering: pixelated;
 
       filter: grayscale(1) brightness(0.8);
+
+      border-radius: 9999px;
+      margin-bottom: 0.75rem;
+      border: 2px solid #e5e7eb;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      filter: grayscale(1) brightness(0.5);
+      transition: filter 0.5s, box-shadow 0.5s;
+      image-rendering: pixelated;
+
     }
 
-    .activo .icono {
-      filter: grayscale(0) brightness(0.95);
-      box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
+    .logro.activo .icono {
+      filter: grayscale(0) brightness(1.1);
+      box-shadow: 0 4px 10px rgba(0,255,100,0.6);
+      border-color: #00ff88;
     }
 
-    .palanca {
-      width: 60px;
-      height: 100px;
-      background-color: #95a5a6;
-      border: 2px solid #7f8c8d;
-      position: relative;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-
-    .palanca:hover {
-      background-color: #7f8c8d;
-      transform: translateY(-5px);
-    }
-
-    .palanca::after {
-      content: '';
+    .logro .tooltip {
       position: absolute;
-      width: 20px;
-      height: 40px;
-      background-color: #7f8c8d;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      transition: top 0.3s ease, background-color 0.3s ease;
-    }
-
-    .activo .palanca::after {
-      top: 50px;
-      background-color: #00c96b;
-    }
-
-    .estado {
-      width: 40px;
-      height: 20px;
-      background-color: #e74c3c;
-      border: 2px solid #c0392b;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-      transition: background-color 0.3s ease, transform 0.3s ease;
-      border-radius: 3px;
-    }
-
-    .activo .estado {
-      background-color: #27ae60;
-      transform: scale(1.2);
-    }
-
-    .tooltip {
-      position: absolute;
+      font-size: 0.75rem;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 0.25rem;
+      border-radius: 0.25rem;
       top: -30px;
       left: 50%;
       transform: translateX(-50%);
-      background-color: rgba(0, 0, 0, 0.7);
-      color: white;
-      padding: 5px;
-      border-radius: 5px;
-      font-size: 12px;
       display: none;
     }
 
@@ -138,42 +103,111 @@
       display: block;
     }
 
-    .explosion {
-      animation: explosion 0.6s forwards;
+    .particula {
       position: absolute;
-      width: 100px;
-      height: 100px;
-      background-color: #e74c3c;
-      border-radius: 50%;
-      box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
+      width: 6px;
+      height: 6px;
+      background-color: #00ff99;
+      border-radius: 9999px;
+      pointer-events: none;
+      z-index: 999;
     }
 
-    @keyframes explosion {
-      0% { transform: scale(1); opacity: 1; }
-      100% { transform: scale(1.5); opacity: 0; }
+    /* Palanca */
+    .palanca {
+      width: 60px;
+      height: 100px;
+      background-color: #cbd5e0;
+      border: 2px solid #a0aec0;
+      border-radius: 0.375rem;
+      margin-bottom: 0.5rem;
+      position: relative;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .palanca:hover {
+      background-color: #a0aec0;
+      transform: translateY(-0.25rem);
+    }
+
+    .palanca::after {
+      content: '';
+      position: absolute;
+      width: 1.25rem;
+      height: 2.5rem;
+      background-color: #a0aec0;
+      top: 0.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 0.25rem;
+      transition: all 0.3s ease;
+    }
+
+    .logro.activo .palanca::after {
+      top: 50px;
+      background-color: #00c96b;
+      box-shadow: 0 0 10px #00ff88;
+    }
+
+    .estado {
+      width: 2.5rem;
+      height: 1.25rem;
+      background-color: #dc2626;
+      border: 2px solid #991b1b;
+      border-radius: 0.375rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+      transition: all 0.3s ease;
+    }
+
+    .logro.activo .estado {
+      background-color: #16a34a;
+      transform: scale(1.2);
+      box-shadow: 0 0 6px #22c55e;
     }
   </style>
 </head>
 <body>
+
 <script>
   const saved = JSON.parse(localStorage.getItem('logros') || '{}');
+  const baseURL = 'https://raw.githubusercontent.com/maxialonso521/paginas-de-logos-de-prgoressbar95/main/';
   const sonidos = {
-    activar: new Howl({ src: ['activar.wav'] }),
-    desactivar: new Howl({ src: ['desactivar.wav'] })
+    activar: new Howl({ src: [baseURL + 'activar.wav'] }),
+    desactivar: new Howl({ src: [baseURL + 'desactivar.wav'] })
   };
 
+  function crearParticulas(x, y, container) {
+    for (let i = 0; i < 20; i++) {
+      const p = document.createElement('div');
+      p.className = 'particula';
+      p.style.left = `${x}px`;
+      p.style.top = `${y}px`;
+      container.appendChild(p);
+
+      gsap.to(p, {
+        x: (Math.random() - 0.5) * 100,
+        y: (Math.random() - 0.5) * 100,
+        scale: Math.random() * 2 + 0.5,
+        duration: Math.random() * 0.5 + 0.5,
+        opacity: 0,
+        ease: 'power2.out',
+        onComplete: () => p.remove()
+      });
+    }
+  }
+
   for (let i = 1; i <= 97; i++) {
+    const id = String(i).padStart(4, '0');
     const logro = document.createElement('div');
     logro.className = 'logro';
     if (saved[i]) logro.classList.add('activo');
 
     const tooltip = document.createElement('div');
-    tooltip.className = 'tooltip';
-    tooltip.textContent = `Logro número ${String(i).padStart(4, '0')}`;
+
 
     const icono = document.createElement('div');
     icono.className = 'icono';
-    icono.style.backgroundImage = `url('./${String(i).padStart(4, '0')}.webp')`;
+    icono.style.backgroundImage = `url('${baseURL + id}.webp')`;
 
     const palanca = document.createElement('div');
     palanca.className = 'palanca';
@@ -181,19 +215,40 @@
     const estado = document.createElement('div');
     estado.className = 'estado';
 
-    logro.appendChild(tooltip);
-    logro.appendChild(icono);
-    logro.appendChild(palanca);
-    logro.appendChild(estado);
+    logro.append(tooltip, icono, palanca, estado);
     document.body.appendChild(logro);
 
-    logro.addEventListener('click', () => {
+    // Animación de entrada con GSAP
+    gsap.to(logro, {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      delay: i * 0.01,
+      ease: "power2.out"
+    });
+
+    logro.addEventListener('click', (e) => {
       const activo = logro.classList.toggle('activo');
       saved[i] = activo;
       localStorage.setItem('logros', JSON.stringify(saved));
       (activo ? sonidos.activar : sonidos.desactivar).play();
+
+      // Vibración de logro
+      gsap.fromTo(logro, { x: -3 }, {
+        x: 3,
+        duration: 0.1,
+        yoyo: true,
+        repeat: 3,
+        ease: "power1.inOut"
+      });
+
+      if (activo) {
+        const rect = logro.getBoundingClientRect();
+        crearParticulas(e.clientX - rect.left, e.clientY - rect.top, logro);
+      }
     });
   }
 </script>
+
 </body>
 </html>
